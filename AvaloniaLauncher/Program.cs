@@ -15,9 +15,9 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 		public static AppBuilder BuildAvaloniaApp()
 		{
 			return AppBuilder.Configure<App>()
-				  .UsePlatformDetect()
-				  .WithInterFont()
-				  .LogToTrace();
+				.UsePlatformDetect()
+				.WithInterFont()
+				.LogToTrace();
 		}
 	}
 }
