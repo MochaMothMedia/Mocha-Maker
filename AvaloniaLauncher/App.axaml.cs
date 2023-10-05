@@ -7,12 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using MochaMothMedia.MochaMaker.AvaloniaUI.Factories;
 using MochaMothMedia.MochaMaker.Core.UI;
 using MochaMothMedia.MochaMaker.Core.UI.Factories;
+using MochaMothMedia.MochaMaker.Core.UI.Factories.Panels;
 using MochaMothMedia.MochaMaker.Editor;
 using MochaMothMedia.MochaMaker.UI.Core;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 {
-	public partial class App : Application
+    public partial class App : Application
 	{
 		public override void Initialize()
 		{
@@ -22,9 +23,17 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 		public override void OnFrameworkInitializationCompleted()
 		{
 			ServiceProvider serviceProvider = new ServiceCollection()
+				// Component Factories
 				.AddSingleton<ILabelFactory, LabelFactory>()
+				.AddSingleton<IBasicPanelFactory, BasicPanelFactory>()
+				.AddSingleton<ISplitPanelFactory, SplitPanelFactory>()
+
+				// Factory Facade
 				.AddSingleton<IComponentFactory, ComponentFactoryFacade>()
+
+				// Windows
 				.AddSingleton<IEditorWindow, EditorWindow>()
+
 				.BuildServiceProvider();
 
 			IEditorWindow editorWindow = serviceProvider.GetService<IEditorWindow>()!;
@@ -39,7 +48,7 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 
 			base.OnFrameworkInitializationCompleted();
 
-			presenter.Content = editorWindow.GetLayout();
+			presenter.Content = editorWindow.GetRoot();
 		}
 	}
 }

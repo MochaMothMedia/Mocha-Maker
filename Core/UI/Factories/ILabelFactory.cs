@@ -4,6 +4,6 @@ namespace MochaMothMedia.MochaMaker.Core.UI.Factories
 {
 	public interface ILabelFactory
 	{
-		ILabelComponent CreateComponent();
+		ILabelComponent Create();
 	}
 }
