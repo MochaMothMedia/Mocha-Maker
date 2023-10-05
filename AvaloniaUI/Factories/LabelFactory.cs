@@ -6,7 +6,7 @@ namespace MochaMothMedia.MochaMaker.AvaloniaUI.Factories
 {
 	public class LabelFactory : ILabelFactory
 	{
-		public ILabelComponent CreateComponent()
+		public ILabelComponent Create()
 		{
 			LabelComponent label = new LabelComponent();
 

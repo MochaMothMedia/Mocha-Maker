@@ -1,7 +1,9 @@
-﻿namespace MochaMothMedia.MochaMaker.UI.Core
+﻿using MochaMothMedia.MochaMaker.Core.UI;
+
+namespace MochaMothMedia.MochaMaker.UI.Core
 {
-	public interface IEditorWindow
+	public interface IEditorWindow : IComponent
 	{
-		object? GetLayout();
+		IComponent GetRoot();
 	}
 }
