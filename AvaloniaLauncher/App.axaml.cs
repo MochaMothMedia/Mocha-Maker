@@ -7,12 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using MochaMothMedia.MochaMaker.AvaloniaUI.Factories;
 using MochaMothMedia.MochaMaker.Core;
 using MochaMothMedia.MochaMaker.Core.UI;
-using MochaMothMedia.MochaMaker.Core.UI.Factories;
-using MochaMothMedia.MochaMaker.Core.UI.Factories.Panels;
+using MochaMothMedia.MochaMaker.Core.UI.Factories.Panes;
 using MochaMothMedia.MochaMaker.Editor;
-using MochaMothMedia.MochaMaker.UI.Core;
 using MochaMothMedia.MochaMaker.YAMLSerializer;
 using MochaMothMedia.MochaMaker.Serialization;
+using MochaMothMedia.MochaMaker.Core.UI.Factories.Components;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Windows;
+using MochaMothMedia.MochaMaker.Core.UI.Factories;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 {
@@ -30,8 +31,9 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 			ServiceProvider serviceProvider = new ServiceCollection()
 				// Component Factories
 				.AddSingleton<ILabelFactory, LabelFactory>()
-				.AddSingleton<IBasicPanelFactory, BasicPanelFactory>()
-				.AddSingleton<ISplitPanelFactory, SplitPanelFactory>()
+				.AddSingleton<IComponentPaneFactory, ComponentPaneFactory>()
+				.AddSingleton<ISplitPaneFactory, SplitPaneFactory>()
+				.AddSingleton<ITabbedPaneFactory, TabbedPaneFactory>()
 
 				// Factory Facade
 				.AddSingleton<IComponentFactory, ComponentFactoryFacade>()

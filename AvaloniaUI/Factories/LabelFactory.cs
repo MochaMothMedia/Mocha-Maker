@@ -1,12 +1,12 @@
-﻿using MochaMothMedia.MochaMaker.AvaloniaUI.Templates;
-using MochaMothMedia.MochaMaker.Core.UI.Components;
-using MochaMothMedia.MochaMaker.Core.UI.Factories;
+﻿using MochaMothMedia.MochaMaker.AvaloniaUI.Templates.Components;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Components;
+using MochaMothMedia.MochaMaker.Core.UI.Factories.Components;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaUI.Factories
 {
-	public class LabelFactory : ILabelFactory
+    public class LabelFactory : ILabelFactory
 	{
-		public ILabelComponent Create()
+		public ILabel Create()
 		{
 			LabelComponent label = new LabelComponent();
 
