@@ -26,7 +26,7 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 				.Build();
 		}
 
-		public void SerializeLayout(IComponent component, string fileName)
+		public void SerializeLayout(IDrawable component, string fileName)
 		{
 			if (component == null)
 				return;
@@ -43,7 +43,7 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 			File.WriteAllText($"{LayoutDirectory}/{fileName}.layout", serializedData);
 		}
 
-		public IComponent? DeserializeLayout(string fileName)
+		public IDrawable? DeserializeLayout(string fileName)
 		{
 			if (!Directory.Exists(LayoutDirectory) || !File.Exists($"{LayoutDirectory}/{fileName}.layout"))
 				return null;
@@ -55,7 +55,7 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 			if (data == null)
 				return null;
 
-			return _serializationTools.DeserializeObject<IComponent>(data);
+			return _serializationTools.DeserializeObject<IDrawable>(data);
 		}
 	}
 }

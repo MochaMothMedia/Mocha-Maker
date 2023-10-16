@@ -1,13 +1,13 @@
 ﻿using MochaMothMedia.MochaMaker.Core.UI;
-using MochaMothMedia.MochaMaker.Core.UI.Components;
-using MochaMothMedia.MochaMaker.Core.UI.Components.Panels;
-using MochaMothMedia.MochaMaker.UI.Core;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Components;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Panes;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Windows;
 
 namespace MochaMothMedia.MochaMaker.Editor
 {
     public class EditorWindow : IEditorWindow
 	{
-		private IComponent _root;
+		private IDrawable _root;
 		private readonly IComponentFactory _componentFactory;
 		private readonly ILayoutSerializer _layoutSerializer;
 
@@ -19,28 +19,61 @@ namespace MochaMothMedia.MochaMaker.Editor
 			_root = LoadLayout();
 		}
 
-		private IComponent LoadLayout()
+		private IDrawable LoadLayout()
 		{
-			IComponent? loadedRoot = _layoutSerializer.DeserializeLayout("Test");
+			try
+			{
+				IDrawable? loadedRoot = _layoutSerializer.DeserializeLayout("Test");
 
-			if (loadedRoot == null)
-				return LoadDefaultLayout();
+				if (loadedRoot == null)
+					return LoadDefaultLayout();
 
-			return loadedRoot;
+				return loadedRoot;
+			} catch
+			{
+				//TODO: Add Logging
+			}
+
+			return LoadDefaultLayout();
 		}
 
-		private IComponent LoadDefaultLayout()
+		private IDrawable LoadDefaultLayout()
 		{
-			ISplitPanelComponent topMenuSplit = _componentFactory.CreateSplitPanelComponent();
-			ISplitPanelComponent mainSplit = _componentFactory.CreateSplitPanelComponent();
-			ISplitPanelComponent consoleSplit = _componentFactory.CreateSplitPanelComponent();
+			ITabbedPane assetViewTabbedPane = _componentFactory.CreateTabbedPane();
+			ITabbedPane entityViewTabbedPane = _componentFactory.CreateTabbedPane();
+			ITabbedPane consoleViewTabbedPane = _componentFactory.CreateTabbedPane();
+			ITabbedPane propertyViewTabbedPane = _componentFactory.CreateTabbedPane();
 
-			ILabelComponent commandAreaLabel = _componentFactory.CreateLabelComponent();
-			ILabelComponent assetViewLabel = _componentFactory.CreateLabelComponent();
-			ILabelComponent hierarchyViewLabel = _componentFactory.CreateLabelComponent();
-			ILabelComponent entityViewerLabel = _componentFactory.CreateLabelComponent();
-			ILabelComponent consoleViewerLabel = _componentFactory.CreateLabelComponent();
-			ILabelComponent entityPropertiesViewerLabel = _componentFactory.CreateLabelComponent();
+			IComponentPane commandAreaPane = _componentFactory.CreateComponentPane();
+			IComponentPane assetViewPane = _componentFactory.CreateComponentPane();
+			IComponentPane hierarchyViewPane = _componentFactory.CreateComponentPane();
+			IComponentPane entityViewPane = _componentFactory.CreateComponentPane();
+			IComponentPane consoleViewPane = _componentFactory.CreateComponentPane();
+			IComponentPane propertyViewPane = _componentFactory.CreateComponentPane();
+
+			ISplitPane topMenuSplit = _componentFactory.CreateSplitPane();
+			ISplitPane mainSplit = _componentFactory.CreateSplitPane();
+			ISplitPane consoleSplit = _componentFactory.CreateSplitPane();
+
+			ILabel commandAreaLabel = _componentFactory.CreateLabelComponent();
+			ILabel assetViewLabel = _componentFactory.CreateLabelComponent();
+			ILabel hierarchyViewLabel = _componentFactory.CreateLabelComponent();
+			ILabel entityViewerLabel = _componentFactory.CreateLabelComponent();
+			ILabel consoleViewerLabel = _componentFactory.CreateLabelComponent();
+			ILabel entityPropertiesViewerLabel = _componentFactory.CreateLabelComponent();
+
+			commandAreaPane.Title = "Command Area";
+			assetViewPane.Title = "Assets";
+			hierarchyViewPane.Title = "Hierarchy";
+			entityViewPane.Title = "Entity Viewer";
+			consoleViewPane.Title = "Console";
+			propertyViewPane.Title = "Properties";
+
+			assetViewTabbedPane.AddComponentPane(assetViewPane);
+			assetViewTabbedPane.AddComponentPane(hierarchyViewPane);
+			entityViewTabbedPane.AddComponentPane(entityViewPane);
+			consoleViewTabbedPane.AddComponentPane(consoleViewPane);
+			propertyViewTabbedPane.AddComponentPane(propertyViewPane);
 
 			commandAreaLabel.Label = "commandArea";
 			assetViewLabel.Label = "assetView";
@@ -49,23 +82,29 @@ namespace MochaMothMedia.MochaMaker.Editor
 			consoleViewerLabel.Label = "consoleViewer";
 			entityPropertiesViewerLabel.Label = "entityPropertiesViewer";
 
-			consoleSplit.AddComponent(entityViewerLabel);
-			consoleSplit.AddComponent(consoleViewerLabel, 200);
+			commandAreaPane.AddComponent(commandAreaLabel);
+			assetViewPane.AddComponent(assetViewLabel);
+			hierarchyViewPane.AddComponent(hierarchyViewLabel);
+			entityViewPane.AddComponent(entityViewerLabel);
+			consoleViewPane.AddComponent(consoleViewerLabel);
+			propertyViewPane.AddComponent(entityPropertiesViewerLabel);
+
+			consoleSplit.AddPane(entityViewTabbedPane);
+			consoleSplit.AddPane(consoleViewTabbedPane, 200);
 			consoleSplit.SplitDirection = SplitDirection.Vertical;
 
-			mainSplit.AddComponent(assetViewLabel, 200);
-			mainSplit.AddComponent(hierarchyViewLabel, 200);
-			mainSplit.AddComponent(consoleSplit);
-			mainSplit.AddComponent(entityPropertiesViewerLabel, 400);
+			mainSplit.AddPane(assetViewTabbedPane, 200);
+			mainSplit.AddPane(consoleSplit);
+			mainSplit.AddPane(propertyViewTabbedPane, 400);
 
-			topMenuSplit.AddComponent(commandAreaLabel, 100);
-			topMenuSplit.AddComponent(mainSplit);
+			topMenuSplit.AddPane(commandAreaPane, 100);
+			topMenuSplit.AddPane(mainSplit);
 			topMenuSplit.SplitDirection = SplitDirection.Vertical;
 
 			return topMenuSplit;
 		}
 
-		public IComponent GetRoot()
+		public IDrawable GetRoot()
 		{
 			return _root;
 		}

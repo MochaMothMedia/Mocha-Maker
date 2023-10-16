@@ -1,5 +1,6 @@
 ﻿using MochaMothMedia.MochaMaker.Core;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace MochaMothMedia.MochaMaker.Serialization
@@ -158,6 +159,16 @@ namespace MochaMothMedia.MochaMaker.Serialization
 				{
 					property.SetValue(obj, Enum.Parse(property.PropertyType, keyValuePair.Value.ToString()!));
 					continue;
+				}
+
+				if (keyValuePair.Value?.GetType() == typeof(string))
+				{
+					try
+					{
+						property.SetValue(obj, Convert.ChangeType(keyValuePair.Value, property.PropertyType));
+						continue;
+					}
+					catch { }
 				}
 
 				property.SetValue(obj, keyValuePair.Value);

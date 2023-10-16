@@ -2,7 +2,7 @@
 {
 	public interface ILayoutSerializer
 	{
-		void SerializeLayout(IComponent root, string fileName);
-		IComponent? DeserializeLayout(string fileName);
+		void SerializeLayout(IDrawable root, string fileName);
+		IDrawable? DeserializeLayout(string fileName);
 	}
 }
