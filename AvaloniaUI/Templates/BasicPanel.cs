@@ -4,7 +4,7 @@ using MochaMothMedia.MochaMaker.Core.UI.Components.Panels;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaUI.Templates
 {
-    public class BasicPanel : Panel, IPanelComponent
+	public class BasicPanel : Panel, IPanelComponent
 	{
 		protected override Type StyleKeyOverride => typeof(Panel);
 

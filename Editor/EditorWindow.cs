@@ -8,39 +8,67 @@ namespace MochaMothMedia.MochaMaker.Editor
     public class EditorWindow : IEditorWindow
 	{
 		IComponent _root;
+		private readonly ILayoutSerializer _layoutSerializer;
 
-		public EditorWindow(IComponentFactory componentFactory)
+		public EditorWindow(IComponentFactory componentFactory, ILayoutSerializer layoutSerializer)
 		{
+			_layoutSerializer = layoutSerializer;
+
+			IComponent? loadedRoot = _layoutSerializer.DeserializeLayout("Test");
+
+			if (loadedRoot != null)
+			{
+				_root = loadedRoot;
+				return;
+			}
+
+			LoadDefaultLayout(componentFactory);
+		}
+
+		private void LoadDefaultLayout(IComponentFactory componentFactory)
+		{
+			ISplitPanelComponent topMenuSplit = componentFactory.CreateSplitPanelComponent();
 			ISplitPanelComponent mainSplit = componentFactory.CreateSplitPanelComponent();
 			ISplitPanelComponent consoleSplit = componentFactory.CreateSplitPanelComponent();
 
+			ILabelComponent commandAreaLabel = componentFactory.CreateLabelComponent();
 			ILabelComponent assetViewLabel = componentFactory.CreateLabelComponent();
 			ILabelComponent hierarchyViewLabel = componentFactory.CreateLabelComponent();
 			ILabelComponent entityViewerLabel = componentFactory.CreateLabelComponent();
 			ILabelComponent consoleViewerLabel = componentFactory.CreateLabelComponent();
 			ILabelComponent entityPropertiesViewerLabel = componentFactory.CreateLabelComponent();
 
+			commandAreaLabel.Label = "commandArea";
 			assetViewLabel.Label = "assetView";
 			hierarchyViewLabel.Label = "hierarchyView";
 			entityViewerLabel.Label = "entityViewer";
 			consoleViewerLabel.Label = "consoleViewer";
 			entityPropertiesViewerLabel.Label = "entityPropertiesViewer";
 
-			consoleSplit.AddComponentAt(0, entityViewerLabel);
-			consoleSplit.AddComponentAt(1, consoleViewerLabel);
+			consoleSplit.AddComponent(entityViewerLabel);
+			consoleSplit.AddComponent(consoleViewerLabel, 200);
 			consoleSplit.SplitDirection = SplitDirection.Vertical;
 
-			mainSplit.AddComponentAt(0, assetViewLabel);
-			mainSplit.AddComponentAt(1, hierarchyViewLabel);
-			mainSplit.AddComponentAt(2, consoleSplit);
-			mainSplit.AddComponentAt(3, entityPropertiesViewerLabel);
+			mainSplit.AddComponent(assetViewLabel, 200);
+			mainSplit.AddComponent(hierarchyViewLabel, 200);
+			mainSplit.AddComponent(consoleSplit);
+			mainSplit.AddComponent(entityPropertiesViewerLabel, 400);
 
-			_root = mainSplit;
+			topMenuSplit.AddComponent(commandAreaLabel, 100);
+			topMenuSplit.AddComponent(mainSplit);
+			topMenuSplit.SplitDirection = SplitDirection.Vertical;
+
+			_root = topMenuSplit;
 		}
 
 		public IComponent GetRoot()
 		{
 			return _root;
+		}
+
+		public void OnClose()
+		{
+			_layoutSerializer.SerializeLayout(_root, "Test");
 		}
 	}
 }

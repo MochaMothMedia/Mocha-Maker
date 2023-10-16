@@ -25,5 +25,7 @@
     <ProjectReference Include="..\AvaloniaUI\AvaloniaUI.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Editor\Editor.csproj" />
+    <ProjectReference Include="..\Serialization\Serialization.csproj" />
+    <ProjectReference Include="..\YAMLSerializer\YAMLSerializer.csproj" />
   </ItemGroup>
 </Project>

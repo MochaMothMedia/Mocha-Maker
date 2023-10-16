@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using MochaMothMedia.MochaMaker.Core.UI.Components;
+using System.Runtime.Serialization;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaUI.Templates
 {
