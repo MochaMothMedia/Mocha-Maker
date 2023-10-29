@@ -4,9 +4,9 @@ using MochaMothMedia.MochaMaker.Core.UI.Drawables.Panes;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaUI.Templates.Panes
 {
-    public class ComponentPane : Panel, IComponentPane
+    public class ComponentPane : StackPanel, IComponentPane
     {
-        protected override Type StyleKeyOverride => typeof(Panel);
+        protected override Type StyleKeyOverride => typeof(StackPanel);
 
         public string Title { get; set; } = "";
         public IComponent[] Components

@@ -14,6 +14,13 @@ using MochaMothMedia.MochaMaker.Serialization;
 using MochaMothMedia.MochaMaker.Core.UI.Factories.Components;
 using MochaMothMedia.MochaMaker.Core.UI.Drawables.Windows;
 using MochaMothMedia.MochaMaker.Core.UI.Factories;
+using MochaMothMedia.MochaMaker.Core.Menu;
+using MochaMothMedia.MochaMaker.Core.UI.Factories.Windows;
+using MochaMothMedia.MochaMaker.AvaloniaUI.Templates;
+using MochaMothMedia.MochaMaker.MenuItems.Layout;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables;
+using MochaMothMedia.MochaMaker.AvaloniaUI.Templates.Panes;
+using Avalonia.Layout;
 
 namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 {
@@ -35,8 +42,16 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 				.AddSingleton<ISplitPaneFactory, SplitPaneFactory>()
 				.AddSingleton<ITabbedPaneFactory, TabbedPaneFactory>()
 
+				.AddSingleton<IPopupWindowFactory, PopupWindowFactory>()
+				.AddSingleton<IConfirmationWindowFactory, ConfirmationWindowFactory>()
+				.AddSingleton<IPrimaryWindowFactory, PrimaryWindowFactory>()
+
 				// Factory Facade
 				.AddSingleton<IComponentFactory, ComponentFactoryFacade>()
+
+				// Menu
+				.AddSingleton<IMenuItem, SaveLayoutMenuItem>()
+				.AddSingleton<IMenu, MainMenu>()
 
 				// Serialization
 				.AddSingleton<ISerializationTools, SerializationTools>()
@@ -48,10 +63,15 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 				.BuildServiceProvider();
 
 			_editorWindow = serviceProvider.GetService<IEditorWindow>()!;
+			MainMenu mainMenu = (serviceProvider.GetService<IMenu>()! as MainMenu)!;
 
 			MainWindow mainWindow = new MainWindow();
 			mainWindow.Closing += OnClose;
 			ContentPresenter presenter = mainWindow.FindControl<ContentPresenter>("content")!;
+			DockPanel dockPanel = new DockPanel()
+			{
+				VerticalAlignment = VerticalAlignment.Stretch
+			};
 
 			if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 			{
@@ -60,12 +80,34 @@ namespace MochaMothMedia.MochaMaker.AvaloniaLauncher
 
 			base.OnFrameworkInitializationCompleted();
 
-			presenter.Content = _editorWindow.GetRoot();
+			IWindow[] layout = _editorWindow.Layout.Windows.ToArray();
+			Control mainLayout = (layout[0].Layout as Control)!;
+
+			mainMenu.SetValue(DockPanel.DockProperty, Dock.Top);
+			mainLayout.SetValue(DockPanel.DockProperty, Dock.Bottom);
+
+			dockPanel.Children.Add(mainMenu);
+			dockPanel.Children.Add(mainLayout);
+
+			presenter.Content = dockPanel;
+
+			for (int i = 1; i < layout.Length; i++)
+			{
+				//TODO: Draw additional windows
+			}
 		}
 
 		public void OnClose(object? sender, WindowClosingEventArgs eventArgs)
 		{
-			_editorWindow?.OnClose();
+			if (_editorWindow == null)
+				return;
+
+			foreach (IWindow window in _editorWindow.Layout.Windows)
+			{
+				window?.OnClose();
+			}
+
+			_editorWindow.OnClose();
 		}
 	}
 }

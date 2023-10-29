@@ -1,4 +1,6 @@
-﻿using MochaMothMedia.MochaMaker.Core.UI;
+﻿using MochaMothMedia.MochaMaker.Core.Menu;
+using MochaMothMedia.MochaMaker.Core.UI;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables;
 using MochaMothMedia.MochaMaker.Core.UI.Drawables.Components;
 using MochaMothMedia.MochaMaker.Core.UI.Drawables.Panes;
 using MochaMothMedia.MochaMaker.Core.UI.Drawables.Windows;
@@ -7,7 +9,8 @@ namespace MochaMothMedia.MochaMaker.Editor
 {
     public class EditorWindow : IEditorWindow
 	{
-		private IDrawable _root;
+		public WindowSet Layout { get; set; } = new WindowSet();
+
 		private readonly IComponentFactory _componentFactory;
 		private readonly ILayoutSerializer _layoutSerializer;
 
@@ -15,20 +18,19 @@ namespace MochaMothMedia.MochaMaker.Editor
 		{
 			_componentFactory = componentFactory;
 			_layoutSerializer = layoutSerializer;
-
-			_root = LoadLayout();
+			Layout.Windows.Add(LoadLayout());
 		}
 
-		private IDrawable LoadLayout()
+		private IWindow LoadLayout()
 		{
 			try
 			{
-				IDrawable? loadedRoot = _layoutSerializer.DeserializeLayout("Test");
+				//IWindow? loadedRoot = _layoutSerializer.DeserializeLayout("Test");
 
-				if (loadedRoot == null)
-					return LoadDefaultLayout();
+				//if (loadedRoot == null)
+				//	return LoadDefaultLayout();
 
-				return loadedRoot;
+				//return loadedRoot;
 			} catch
 			{
 				//TODO: Add Logging
@@ -37,7 +39,7 @@ namespace MochaMothMedia.MochaMaker.Editor
 			return LoadDefaultLayout();
 		}
 
-		private IDrawable LoadDefaultLayout()
+		private IWindow LoadDefaultLayout()
 		{
 			ITabbedPane assetViewTabbedPane = _componentFactory.CreateTabbedPane();
 			ITabbedPane entityViewTabbedPane = _componentFactory.CreateTabbedPane();
@@ -101,17 +103,16 @@ namespace MochaMothMedia.MochaMaker.Editor
 			topMenuSplit.AddPane(mainSplit);
 			topMenuSplit.SplitDirection = SplitDirection.Vertical;
 
-			return topMenuSplit;
-		}
+			IWindow primaryWindow = _componentFactory.CreatePrimaryWindow();
 
-		public IDrawable GetRoot()
-		{
-			return _root;
+			primaryWindow.Layout = topMenuSplit;
+
+			return primaryWindow;
 		}
 
 		public void OnClose()
 		{
-			_layoutSerializer.SerializeLayout(_root, "Test");
+			_layoutSerializer.SerializeLayout(Layout, "Test");
 		}
 	}
 }

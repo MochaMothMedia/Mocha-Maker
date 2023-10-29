@@ -1,5 +1,6 @@
 ﻿using MochaMothMedia.MochaMaker.Core;
 using MochaMothMedia.MochaMaker.Core.UI;
+using MochaMothMedia.MochaMaker.Core.UI.Drawables.Windows;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -26,12 +27,12 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 				.Build();
 		}
 
-		public void SerializeLayout(IDrawable component, string fileName)
+		public void SerializeLayout(WindowSet layout, string fileName)
 		{
-			if (component == null)
+			if (layout == null)
 				return;
 
-			Dictionary<string, object?>? data =  _serializationTools.SerializeObject(component);
+			Dictionary<string, object?>? data =  _serializationTools.SerializeObject(layout);
 
 			if (data == null)
 				return;
@@ -43,7 +44,7 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 			File.WriteAllText($"{LayoutDirectory}/{fileName}.layout", serializedData);
 		}
 
-		public IDrawable? DeserializeLayout(string fileName)
+		public WindowSet? DeserializeLayout(string fileName)
 		{
 			if (!Directory.Exists(LayoutDirectory) || !File.Exists($"{LayoutDirectory}/{fileName}.layout"))
 				return null;
@@ -55,7 +56,7 @@ namespace MochaMothMedia.MochaMaker.YAMLSerializer
 			if (data == null)
 				return null;
 
-			return _serializationTools.DeserializeObject<IDrawable>(data);
+			return _serializationTools.DeserializeObject<WindowSet>(data);
 		}
 	}
 }

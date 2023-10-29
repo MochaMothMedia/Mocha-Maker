@@ -25,6 +25,11 @@
     <ProjectReference Include="..\AvaloniaUI\AvaloniaUI.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Editor\Editor.csproj" />
+    <ProjectReference Include="..\EntityOrchestrator\EntityOrchestrator.csproj" />
+    <ProjectReference Include="..\EntityViewer\EntityViewer.csproj" />
+    <ProjectReference Include="..\MainMenu\MenuItems.csproj" />
+    <ProjectReference Include="..\PrefabManager\PrefabManager.csproj" />
+    <ProjectReference Include="..\ProjectManager\ProjectManager.csproj" />
     <ProjectReference Include="..\Serialization\Serialization.csproj" />
     <ProjectReference Include="..\YAMLSerializer\YAMLSerializer.csproj" />
   </ItemGroup>
