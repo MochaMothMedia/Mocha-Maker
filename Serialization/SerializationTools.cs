@@ -1,6 +1,5 @@
 ﻿using MochaMothMedia.MochaMaker.Core;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace MochaMothMedia.MochaMaker.Serialization

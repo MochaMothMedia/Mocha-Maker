@@ -2,7 +2,8 @@
 {
 	public interface IWindow
 	{
-		IDrawable GetRoot();
+		public IDrawable? Layout { get; set; }
+
 		void OnClose();
 	}
 }

@@ -74,7 +74,7 @@ namespace MochaMothMedia.MochaMaker.AvaloniaUI.Templates.Panes
 			_tabPanel.Children.Insert(clampedIndex, tab);
 			_activePane = clampedIndex;
 
-			tab.PointerPressed += (object sender, PointerPressedEventArgs eventArgs) =>
+			tab.PointerPressed += (object? sender, PointerPressedEventArgs eventArgs) =>
 			{
 				if (clampedIndex == _activePane)
 					return;
